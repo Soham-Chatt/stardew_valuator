@@ -23,6 +23,9 @@ seeds are excluded in the calculation.
     <li> Launch the game using SMAPI. </li>
 </ol>
 
+You can also check out the <a href="https://stardewvalleywiki.com/Modding:Player_Guide/Getting_Started#Install_mods">
+Stardew Valley Wiki</a> if you are having trouble installing.
+
 <h3>Usage</h3>
 The mod is triggered by pressing a button bound to it. By default, this button is set to H.
 
