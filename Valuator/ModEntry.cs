@@ -58,8 +58,9 @@ namespace ClassLibrary1
             if (!Context.IsWorldReady || Game1.player == null || Game1.player?.Items == null)
                 return;
 
-            // Standard excluded items
+            // Standard excluded items and categories
             string[] excludedItems = { "Torch", "Wood", "Stone", "Salad" };
+            int[] excludedCategories = { -7, -74 }; // Cooking, Seeds/Saplings
             
             // Set starting information
             _info.Clear();
@@ -71,7 +72,8 @@ namespace ClassLibrary1
             foreach (var item in Game1.player.Items)
             {
                 // Check if the item is a valid object 
-                if (item is not StardewValley.Object obj || excludedItems.Contains(item.DisplayName)) continue;
+                if (item is not StardewValley.Object obj || excludedItems.Contains(item.DisplayName) 
+                                                         || excludedCategories.Contains(item.Category)) continue;
 
                 // Information about the items
                 _totalSalePrice += item.salePrice();
