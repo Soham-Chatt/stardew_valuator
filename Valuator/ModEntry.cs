@@ -29,14 +29,14 @@ namespace ClassLibrary1
         ** Private methods
         *********/
         // Class wide variables
-        // Specials
+        // Collections
         private readonly List<string> _info = new();
         private readonly List<string> _itemInfoShort = new();
         private readonly Dictionary<string, string> _itemInfo = new();
         // Constants
         private const string HeaderName = "Items";
         private const string HeaderValue = "Value";
-        // Normals
+        // Primitives
         private int _totalSalePrice;
         private int _totalItems;
         private bool _largeStack;
