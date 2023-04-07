@@ -19,80 +19,113 @@ namespace ClassLibrary1
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
-            helper.Events.Input.ButtonPressed += this.OnButtonPressed;
+            helper.Events.Input.ButtonPressed += this.ShowSummary;
+            helper.Events.Input.ButtonPressed += this.ShowFull;
         }
 
 
         /*********
         ** Private methods
         *********/
-        /// <summary>Raised after the player presses a button on the keyboard, controller, or mouse.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
+        // Class wide variables
+        private List<string> info = new();
+        private int totalSalePrice;
+        private int totalItems;
+        // Definition of the rarities
+        Dictionary<int, string> qualityMap = new()
         {
-            // ignore if player hasn't loaded a save yet or doesnt press the H button
-            if (!Context.IsWorldReady)
+            { 0, "Normal" },
+            { 1, "Silver" },
+            { 2, "Gold" },
+            { 3, "Iridium" }
+        }; 
+
+        
+        /// <summary>Calculates and creates the string info to be used in later functions</summary>
+        private void Calculations()
+        {
+            // Check if the world is loaded and for null references
+            if (!Context.IsWorldReady || Game1.player == null || Game1.player?.Items == null)
                 return;
-            if (e.Button != SButton.H)
-                return;
+
+            // Standard excluded items
+            string[] excludedItems = { "Torch", "Wood", "Stone", "Salad" };
             
-            // check for null references
-            if (Game1.player == null || Game1.player?.Items == null)
-                return;
+            // Set starting information
+            info.Clear();
+            totalSalePrice = 0;
+            totalItems = 0;
+
+            // Headers
+            var headerName = "Items".PadRight(15);
+            var headerValue = "Value".PadLeft(27);
+            info.Add($"{headerName}{headerValue}");
             
             // Get all items in the player inventory
-            
-            int totalSalePrice = 0;
-            int totalItems = 0;
-            string[] excludeditems = { "Torch", "Wood", "Stone", "Salad" };
-            string HeaderName = "Items".PadRight(15);
-            string HeaderValue = "Value".PadLeft(22);
-            string info = $"\n{HeaderName}{HeaderValue}\n";
             foreach (var item in Game1.player.Items)
             {
-                if (item is StardewValley.Object obj)
-                {
-                    // Exclude some common items
-                    if (excludeditems.Contains(item.DisplayName))
-                        continue;
-                    
-                    // Information about the items
-                    totalSalePrice += item.salePrice();
-                    totalItems += obj.Stack;
-                    var value = obj.sellToStorePrice() * obj.Stack;
-                    Dictionary<int, string> qualityMap = new Dictionary<int, string>()
-                    {
-                        { 0, "Normal" },
-                        { 1, "Silver" },
-                        { 2, "Gold" },
-                        { 3, "Iridium" }
-                    }; 
-                    
-                    // Formatting for the items
-                    string itemValue = (obj.Stack > 1)  ? $"{value} ({obj.sellToStorePrice()} pp)" : $"{value}";
-                    int sellPriceLength = obj.sellToStorePrice().ToString().Length;
-                    int paddingLength = 18 - sellPriceLength;
-                    string itemName = $"{obj.Stack}x {obj.DisplayName} ({qualityMap[obj.Quality]})";
-                    itemName = (obj.Stack > 1) ? itemName.PadRight(33) : itemName.PadRight(25);
-                    itemValue = (obj.Stack >= 10) ? itemValue.PadLeft(15) : itemValue.PadLeft(16);
-                    info += $"{itemName}{itemValue}\n";
-                }
+                // Check if the item is a valid object 
+                if (item is not StardewValley.Object obj || excludedItems.Contains(item.DisplayName)) continue;
+
+                // Information about the items
+                totalSalePrice += item.salePrice();
+                totalItems += obj.Stack;
+                var value = obj.sellToStorePrice() * obj.Stack;
+
+                // Format each item line
+                var itemValue = (obj.Stack > 1)  ? $"{value} ({obj.sellToStorePrice()} p.p.)" : $"{value}";
+                var itemName = $"{obj.Stack}x {obj.DisplayName} ({qualityMap[obj.Quality]})";
+                
+                // Special cases for formatting
+                itemName = (obj.Stack > 1) ? itemName.PadRight(33) : itemName.PadRight(25);
+                itemValue = (obj.Stack >= 10) ? itemValue.PadLeft(15) : itemValue.PadLeft(16);
+                itemValue = (obj.Stack >= 10 && obj.sellToStorePrice() >= 100) ? itemValue.PadLeft(17) : itemValue.PadLeft(16);
+                
+                // Add the string into the array
+                info.Add($"{itemName}{itemValue}");
             }
-            info += $"\nTotal sale price: {totalSalePrice} ({totalItems} items)";
+
+            info.Add($"Total sale price: {totalSalePrice} ({totalItems} items)");
+        }
+
+        /// <summary>Shows the short version of the calculated sale prices</summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ShowSummary(object sender, ButtonPressedEventArgs e)
+        {
+            if (e.Button != SButton.H) return;
+            Calculations();
+            this.Monitor.Log($"{Game1.player.Name} pressed {e.Button}.", LogLevel.Debug);
+            
+            Game1.drawObjectDialogue(totalSalePrice == 0
+                ? "No sellable items in your inventory"
+                : $"Total sale price: {totalSalePrice} ({totalItems} items & {info.Count}) objects");
+            
+            // Print out all lines in the array
+            foreach (var t in info)
+            {
+                Monitor.Log(t, LogLevel.Info);
+            }
+        }
+
+        private void ShowFull(object sender, ButtonPressedEventArgs e)
+        {
+            if (e.Button != SButton.F) return;
+            Calculations();
+            this.Monitor.Log($"{Game1.player.Name} pressed {e.Button}.", LogLevel.Debug);
             if (totalSalePrice == 0)
             {
-                info = "No sellable items in your inventory";
-                Game1.drawObjectDialogue(info);
+                Game1.drawObjectDialogue("No sellable items in your inventory");
             }
             else
             {
-                Game1.drawObjectDialogue($"Total sale price items: {totalSalePrice} ({totalItems} items)");
+                var output = "";
+                foreach (var t1 in info)
+                {
+                    output += t1 + "\n";
+                }
+                Game1.drawObjectDialogue(output);
             }
-            Monitor.Log(info, LogLevel.Info);
-
-            // print button presses to the console window
-            this.Monitor.Log($"{Game1.player.Name} pressed {e.Button}.", LogLevel.Debug);
         }
     }
 }
