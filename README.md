@@ -49,7 +49,7 @@ The mod is triggered by pressing a button bound to it. By default, this button i
     _largeValue: A boolean that is true if the sale price per item is greater than or equal to 100.
     _qualityMap: A dictionary that maps the quality of an item to its corresponding string representation.
 
-<h2>Future updates</h2>
+<h2>Roadmap</h2>
 <h3 style="font-weight:normal;">
     <ul>
         <li> Expanded output format in-game in the form of a list (comparable to the day recap box) </li>
