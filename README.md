@@ -7,7 +7,7 @@ corresponding sale price. It can be run using SMAPI. The code is written in C#. 
     SMAPI 3.0 or later
     Stardew Valley 1.5 or later
 
-<h2>How it works</h2><hr style="height: 3px;">
+<h2>How it works</h2>
 
 When the mod is loaded, it listens to the ButtonPressed event. When the player presses the button bound to the mod, 
 the mod creates a list of all sellable items in the player's inventory and their sale price. The mod then formats this 
@@ -29,7 +29,7 @@ Stardew Valley Wiki</a> if you are having trouble installing.
 <h3>Usage</h3>
 The mod is triggered by pressing a button bound to it. By default, this button is set to H.
 
-<h2>Code overview</h2><hr style="height: 3px;">
+<h2>Code overview</h2>
 <h3>ModEntry class</h3>
 
     Entry method: This is the mod's entry point, where it sets up the event listeners and binds the mod to a button press event.
@@ -49,7 +49,7 @@ The mod is triggered by pressing a button bound to it. By default, this button i
     _largeValue: A boolean that is true if the sale price per item is greater than or equal to 100.
     _qualityMap: A dictionary that maps the quality of an item to its corresponding string representation.
 
-<h2>Future updates</h2><hr style="height: 3px;">
+<h2>Roadmap</h2>
 <h3 style="font-weight:normal;">
     <ul>
         <li> Expanded output format in-game in the form of a list (comparable to the day recap box) </li>
