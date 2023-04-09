@@ -21,7 +21,7 @@ namespace ClassLibrary1
         public override void Entry(IModHelper helper)
         {
             helper.Events.Input.ButtonPressed += this.ShowSummary;
-            //TODO: helper.Events.Input.ButtonPressed += this.ShowExpanded;
+            helper.Events.Input.ButtonPressed += this.ShowExpanded;
         }
 
 
@@ -76,9 +76,9 @@ namespace ClassLibrary1
                                                          || excludedCategories.Contains(item.Category)) continue;
 
                 // Information about the items
-                _totalSalePrice += item.salePrice();
-                _totalItems += obj.Stack;
                 var value = obj.sellToStorePrice() * obj.Stack;
+                _totalItems += obj.Stack;
+                _totalSalePrice += value;
 
                 // Format each item line
                 var itemName = $"{obj.Stack}x {obj.DisplayName} ({_qualityMap[obj.Quality]})";
