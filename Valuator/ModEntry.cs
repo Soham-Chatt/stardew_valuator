@@ -65,6 +65,7 @@ namespace ClassLibrary1
             // Set starting information
             _info.Clear();
             _itemInfo.Clear();
+            _itemInfoShort.Clear();
             _totalSalePrice = 0;
             _totalItems = 0;
 
@@ -83,7 +84,8 @@ namespace ClassLibrary1
                 // Format each item line
                 var itemName = $"{obj.Stack}x {obj.DisplayName} ({_qualityMap[obj.Quality]})";
                 var itemValue = $"{value} ({obj.sellToStorePrice()} p.p.)";
-                _itemInfoShort.Add($"{obj.DisplayName} ({value})");
+                _itemInfoShort.Add($"{obj.DisplayName} ({_qualityMap[obj.Quality]}) [{value}]");
+                
                 // Special cases for formatting
                 _largeStack = (obj.Stack >= 10);
                 _largeValue = (obj.Stack >= 10 && obj.sellToStorePrice() >= 100);
