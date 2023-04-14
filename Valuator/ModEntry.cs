@@ -73,7 +73,7 @@ namespace ClassLibrary1
             {
                 // Check if the item is a valid object 
                 if (item is not StardewValley.Object obj || excludedItems.Contains(item.DisplayName) 
-                                                         || excludedCategories.Contains(item.Category)) continue;
+                    || excludedCategories.Contains(item.Category) || obj.sellToStorePrice() == 0) continue;
 
                 // Information about the items
                 var value = obj.sellToStorePrice() * obj.Stack;
