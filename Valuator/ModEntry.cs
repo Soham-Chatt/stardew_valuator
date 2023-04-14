@@ -48,7 +48,7 @@ namespace ClassLibrary1
             { 0, "Normal" },
             { 1, "Silver" },
             { 2, "Gold" },
-            { 3, "Iridium" }
+            { 4, "Iridium" }
         }; 
 
         /// <summary>Calculates and creates the list "info" to be used in other functions</summary>
