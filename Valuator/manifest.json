@@ -1,7 +1,7 @@
 ﻿{
   "Name": "Valuator",
   "Author": "Soham Chatterjee",
-  "Version": "1.0.0",
+  "Version": "1.0.3",
   "Description": "This mod checks for the value of your inventory if everything was sold right now",
   "UniqueID": "SohamChatterjee.Valuator",
   "EntryDll": "valuator.dll",
