@@ -80,22 +80,9 @@ namespace ClassLibrary1
                 var value = obj.sellToStorePrice() * obj.Stack;
                 _totalItems += obj.Stack;
                 _totalSalePrice += value;
-
-                // Log the quality value for debugging
-               this.Monitor.Log($"Item: {obj.DisplayName}, Quality: {obj.Quality}", LogLevel.Debug);
     
                 // Format each item line
-                string quality;
-                if (_qualityMap.TryGetValue(obj.Quality, out var qualityName))
-                {
-                    quality = qualityName;
-                }
-                else
-                {
-                    quality = "Unknown";
-                    this.Monitor.Log($"Unknown quality value encountered: {obj.Quality} for item {obj.DisplayName}", LogLevel.Warn);
-                }
-            
+                string quality = qualityName;
                 var itemName = $"{obj.Stack}x {obj.DisplayName} ({quality})";
                 var itemValue = $"{value} ({obj.sellToStorePrice()} p.p.)";
                 _itemInfoShort.Add($"{obj.DisplayName} ({quality}) [{value}]");
