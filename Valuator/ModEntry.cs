@@ -81,10 +81,24 @@ namespace ClassLibrary1
                 _totalItems += obj.Stack;
                 _totalSalePrice += value;
 
+                // Log the quality value for debugging
+               this.Monitor.Log($"Item: {obj.DisplayName}, Quality: {obj.Quality}", LogLevel.Debug);
+    
                 // Format each item line
-                var itemName = $"{obj.Stack}x {obj.DisplayName} ({_qualityMap[obj.Quality]})";
+                string quality;
+                if (_qualityMap.TryGetValue(obj.Quality, out var qualityName))
+                {
+                    quality = qualityName;
+                }
+                else
+                {
+                    quality = "Unknown";
+                    this.Monitor.Log($"Unknown quality value encountered: {obj.Quality} for item {obj.DisplayName}", LogLevel.Warn);
+                }
+            
+                var itemName = $"{obj.Stack}x {obj.DisplayName} ({quality})";
                 var itemValue = $"{value} ({obj.sellToStorePrice()} p.p.)";
-                _itemInfoShort.Add($"{obj.DisplayName} ({_qualityMap[obj.Quality]}) [{value}]");
+                _itemInfoShort.Add($"{obj.DisplayName} ({quality}) [{value}]");
                 
                 // Special cases for formatting
                 _largeStack = (obj.Stack >= 10);
